@@ -1,0 +1,51 @@
+#include "raylib.h"
+
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
+
+int main(void)
+{
+    //for camera as player can see
+    Camera3D camera = {0};
+
+    camera.position = (Vector3){0.0f, 5.0f, 10.0f}; // Camera position
+    camera.target = (Vector3){0.0f, 0.0f, 0.0f}; // Camera target it looks-at
+    camera.up = (Vector3){0.0f, 1.0f, 0.0f}; // Camera up vector (rotation over its axis)
+    camera.fovy = 45.0f; // Camera field-of-view apperture in Y (degrees) in perspective, used as near plane width in orthographic
+    camera.projection = CAMERA_PERSPECTIVE; // Camera projection: CAMERA_PERSPECTIVE or CAMERA_ORTHOGRAPHIC
+    
+    // Configure the window before creating it
+    SetConfigFlags(
+        FLAG_WINDOW_RESIZABLE |
+        FLAG_MSAA_4X_HINT |
+        FLAG_VSYNC_HINT
+    );
+
+    // Create window
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "WSB"); //open world sandbox will be window name mean game or application name 
+
+    // Run at 60 FPS if VSync is unavailable
+    SetTargetFPS(60);
+
+    while (!WindowShouldClose())
+    {
+        BeginDrawing();
+        
+        ClearBackground(BLACK);
+        
+        BeginMode3D(camera); //for start 3d view draw only between BeginMode3D() and EndMode3D() draw as 3d else count 2d 
+        DrawPlane((Vector3){0, 0, 0}, (Vector2){100, 100}, GREEN); //(Vector3 centerPos, Vector2 size, Color color);
+        DrawCube((Vector3){0, 0.5f, 0}, 1, 1, 1, RED); //Vector3 position, float width, float height, float length, Color color);
+        DrawGrid(20, 1.0f); //DrawGrid(int slices, float spacing);
+        EndMode3D(); // for end 3d view draw 
+
+        DrawText("WSB", 20, 20, 30, BLACK);// void DrawText(const char *text, int posX, int posY, int fontSize, Color color);
+        DrawFPS(20, 60); //void DrawFPS(int posX, int posY);
+        
+        EndDrawing();
+    }
+
+    CloseWindow();
+
+    return 0;
+}
