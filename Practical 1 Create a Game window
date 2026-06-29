@@ -6,8 +6,8 @@ FLAG_WINDOW_RESIZABLE for Allows the user to resize the window. (can't work now 
 FLAG_MSAA_4X_HINT for Turns on 4× anti-aliasing if the GPU supports it.
 FLAG_VSYNC_HINT Synchronizes rendering with your monitor's refresh rate to reduce screen tearing.
 
-function BeginDrawing() for start to draw in side window 
-function EndDrawing(); for end to draw in side window
+function BeginDrawing() for start to draw inside window 
+function EndDrawing(); for end to draw inside window
 
 every thing draws between this 2 mean all our frame draw between this 2 function
 
