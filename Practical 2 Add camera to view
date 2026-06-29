@@ -1,0 +1,14 @@
+Create A game widnow using Raylib
+
+function BeginMode3D() for 3d drawing so we can dispay in camera  
+function EndMode3D(); for end 3d mode 
+
+every thing that is 3D draws between this 2 mean all camera viwe draw between this 2 function out side of this condsider noraml 2d basically not part of 3d world
+
+Write a code that clear window 
+Add camera in scene for 3d view 
+Add object plane at origin, size and color of plane will be your choice
+Add object cube near origin(not for more than 5 units) , size and color of cube your choice
+Add Grid slice and spaccing up to you
+
+Additonl bonus (display text and fps like previouse one too)
