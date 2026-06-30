@@ -1,0 +1,6 @@
+Wrtie a code for Movecamera in scene
+
+usefunction IsKeyDown() for Checks if a key is currently use for input
+note : Unlike IsKeyPressed() in most of game engine, this runs every frame while the key is held.
+
+use function GetFrameTime() for Returns the time (in seconds) since the previous frame. 
