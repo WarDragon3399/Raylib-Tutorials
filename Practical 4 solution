@@ -1,0 +1,100 @@
+#include "raylib.h"
+
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
+
+// 1. Define the Player struct first
+typedef struct Player {
+    Vector3 position;
+    float moveSpeed;
+} Player;
+
+// 2. Declare function prototypes before they are used
+Player CreatePlayer(void);
+void UpdatePlayer(Player *player);
+void DrawPlayerbody(Player *player);
+void UpdateFollowCamera(Camera3D *camera, Player *player);
+
+int main(void) {
+    // Configure the window before creating it
+    SetConfigFlags(
+        FLAG_WINDOW_RESIZABLE |
+        FLAG_MSAA_4X_HINT |
+        FLAG_VSYNC_HINT
+    );
+
+    // Create window
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "WSB"); 
+
+    // Initialize Game Objects
+    Player player = CreatePlayer();
+    
+    Camera3D camera = {0};
+    camera.position = (Vector3){0.0f, 5.0f, 10.0f}; 
+    camera.target = (Vector3){0.0f, 0.0f, 0.0f};    
+    camera.up = (Vector3){0.0f, 1.0f, 0.0f};        
+    camera.fovy = 45.0f; 
+    camera.projection = CAMERA_PERSPECTIVE; 
+
+    // Run at 60 FPS if VSync is unavailable
+    SetTargetFPS(60);
+
+    // Main game loop
+    while (!WindowShouldClose()) {
+        // --- UPDATE ---
+        UpdatePlayer(&player);
+        UpdateFollowCamera(&camera, &player);
+         
+        // --- DRAW ---
+        BeginDrawing();
+         
+        ClearBackground(BLACK);
+         
+        BeginMode3D(camera); 
+            DrawPlane((Vector3){0, 0, 0}, (Vector2){100, 100}, GREEN); 
+            DrawGrid(20, 1.0f); 
+            
+            // Draw the player
+            DrawPlayerbody(&player); 
+        EndMode3D(); 
+
+        // 2D UI elements must be drawn outside of BeginMode3D
+        DrawText("WSB", 20, 20, 30, WHITE);
+        DrawFPS(20, 60);
+         
+        EndDrawing();
+    }
+    
+    CloseWindow();
+    return 0;
+}
+
+// 3. Define the functions outside of main()
+
+Player CreatePlayer(void) {
+    Player player = { 0 }; 
+    // Set Y to 0.5f so the 1x1x1 cube rests on top of the grid rather than clipping through it
+    player.position = (Vector3){ 0.0f, 0.5f, 0.0f }; 
+    player.moveSpeed = 5.0f; 
+    return player;
+}
+
+void UpdatePlayer(Player *player) {
+    float delta = GetFrameTime();
+
+    if (IsKeyDown(KEY_W)) player->position.z -= player->moveSpeed * delta;
+    if (IsKeyDown(KEY_S)) player->position.z += player->moveSpeed * delta;
+    if (IsKeyDown(KEY_A)) player->position.x -= player->moveSpeed * delta;
+    if (IsKeyDown(KEY_D)) player->position.x += player->moveSpeed * delta;
+}
+
+void DrawPlayerbody(Player *player) {
+    DrawCube(player->position, 1.0f, 1.0f, 1.0f, RED);
+}
+
+void UpdateFollowCamera(Camera3D *camera, Player *player) {
+    camera->target = player->position;
+    camera->position.x = player->position.x;
+    camera->position.y = player->position.y + 5.0f;
+    camera->position.z = player->position.z + 10.0f;
+}
